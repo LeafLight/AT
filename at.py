@@ -34,6 +34,8 @@ def addNote(name:str, path: str):
     with open('note.json', 'w') as f:
         json.dump(note_json, f)
 
+    os.mkdir(os.path.join("tplt", name))
+
 
 @app.command()
 def addTplt(name:str, tplt: str, o: bool = False):
