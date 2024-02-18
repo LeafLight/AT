@@ -10,6 +10,10 @@ import importlib
 import json
 import tempfile
 from subprocess import call
+
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 # In Brief:
 # - Get Time
 # - Write Template
@@ -102,6 +106,30 @@ def n(name:str, tplt: str, o: bool = True):
     if o:
         EDITOR = os.environ.get('EDITOR') if os.environ.get('EDITOR') else 'vim'
         call([EDITOR, tgt_note])
+
+@app.command()
+def list(name:str = None):
+    """List the key-value pair in note.json, or list templates of specified note if name was given
+    name: name of the note of which templates you want to inspect
+    """
+    if not name:
+        with open('note.json', 'r') as f:
+            note_json = json.load(f)
+        print(note_json)
+    else:
+        try:
+            tplt_list = os.listdir(name)
+            print("[bold green]" + name + ":")
+            for t in tplt_list:
+                print("- " + t[:-3])
+        except:
+            print("[bold red]" + "Not found, Check Your Note Name")
+            with open('note.json', 'r') as f:
+                note_json = json.load(f)
+            print(note_json)
+
+
+
 
 if __name__ == "__main__":
     app()

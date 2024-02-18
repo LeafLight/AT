@@ -77,3 +77,11 @@ Its advantages:
 # Extra
 
 - The `{note: path/to/note}` json file is named `note.json`, edit it if you have changed the location of the notes, or just `addnote` again with new location using the same name.
+
+- command `list`
+```
+# Print note.json in module rich
+python ./at.py list
+# Print the templates of specified note name
+python ./at.py list --name=YourNoteNameHere
+```
