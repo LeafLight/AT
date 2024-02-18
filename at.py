@@ -118,7 +118,7 @@ def list(name:str = None):
         print(note_json)
     else:
         try:
-            tplt_list = os.listdir(name)
+            tplt_list = os.listdir(os.path.join("tplt", name))
             print("[bold green]" + name + ":")
             for t in tplt_list:
                 print("- " + t[:-3])
