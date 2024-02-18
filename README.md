@@ -7,7 +7,7 @@ date: 2024-02-18 18:50:31
 
 # Abstract
 
-A CLI tool help you with templates(often daily templates that are supposed to be appended to diary-like recording markdown file **frequently**). The name __At__ comes from __a__dd __t__oday, __a__dd __t__emplates, __a__rrange __t__emplates or anything else.
+A CLI tool help you with templates(often daily templates that are supposed to be appended to diary-like recording markdown file **frequently**). The name __At__ comes from Add Today, Add Templates, Arrange Templates or anything else.
 
 It's aimed to:
 
