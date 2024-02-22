@@ -154,13 +154,14 @@ def check(t:bool = False):
                     )
                 )
         tms = os.listdir(os.path.join("./tplt", na))
+        tms = [tm[:-3] for tm in tms if tm != "__pycache__"]
         if t:
             for tm in tms:
                 try:
                     tplt = importlib.import_module('.'.join(['tplt', na, tm]))
                     print("\t%s: %s" % (
                         "[bold blue]" + tm,
-                        "[green]" + "available"
+                        "[blue]" + "available"
                         )
                           )
                 except:
