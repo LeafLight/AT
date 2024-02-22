@@ -5,7 +5,7 @@
 #---
 import os
 import typer
-from rich import print, inspect
+from rich import print, print_json, inspect
 import importlib
 import json
 import tempfile
@@ -30,11 +30,13 @@ def addNote(name:str, path: str):
     """
     with open('note.json', 'r') as f:
         note_json = json.load(f)
+    if name not in note_json.keys():
+        os.mkdir(os.path.join("tplt", name))
+
     note_json[name] = path
     with open('note.json', 'w') as f:
-        json.dump(note_json, f)
+        json.dump(note_json, f, indent=2)
 
-    os.mkdir(os.path.join("tplt", name))
 
 
 @app.command()
@@ -117,7 +119,7 @@ def list(name:str = None):
     if not name:
         with open('note.json', 'r') as f:
             note_json = json.load(f)
-        print(note_json)
+        print_json(data=note_json)
     else:
         try:
             tplt_list = os.listdir(os.path.join("tplt", name))
@@ -130,9 +132,52 @@ def list(name:str = None):
                 note_json = json.load(f)
             print(note_json)
 
+@app.command()
+def check(t:bool = False):
+    """check if all the key-value pairs in note.json are available\n
+    t: also check if the templates are available
+    """
 
+    # get all the names and paths stored in note.json
+    with open('note.json', 'r') as f:
+        note_json = json.load(f)
+    names = note_json.keys()
+    paths = [note_json[n] for n in names]
+    names_available = [n for n in names if os.path.exists(note_json[n])]
+    paths_available = [p for p in paths if os.path.exists(p)]
+    names_unavailable = [n for n in names if not os.path.exists(note_json[n])]
+    paths_unavailable = [p for p in paths if not os.path.exists(p)]
+    for na in names_available:
+        print(
+                "[bold green] %s [/bold green]: [green]available[green]" % (
+                    na
+                    )
+                )
+        tms = os.listdir(os.path.join("./tplt", na))
+        if t:
+            for tm in tms:
+                try:
+                    tplt = importlib.import_module('.'.join(['tplt', na, tm]))
+                    print("\t%s: %s" % (
+                        "[bold blue]" + tm,
+                        "[green]" + "available"
+                        )
+                          )
+                except:
+                    print("\t%s: %s" % (
+                        "[bold orange]" + tm,
+                        "[red]" + "unavailable"
+                        )
+                          )
+
+    for nu in names_unavailable:
+        print(
+                "[bold red] %s [/bold red]: [orange]%s[/orange] [red]unavailable[red]" %(
+                    nu,
+                    note_json[nu]
+                    )
+                )
 
 
 if __name__ == "__main__":
     app()
-
